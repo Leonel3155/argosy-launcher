@@ -95,12 +95,6 @@ internal class VaultContext(base: Context, private val root: File) : ContextWrap
     override fun createDisplayContext(display: Display): Context =
         VaultContext(super.createDisplayContext(display), root)
 
-    override fun createWindowContext(type: Int, options: android.os.Bundle?): Context =
-        VaultContext(super.createWindowContext(type, options), root)
-
-    override fun createAttributionContext(attributionTag: String?): Context =
-        VaultContext(super.createAttributionContext(attributionTag), root)
-
     /**
      * Android/data/<package>/v for the volume that owns [appFilesDir], with .nomedia written once.
      */
