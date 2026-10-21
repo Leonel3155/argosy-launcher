@@ -150,6 +150,11 @@ fun AboutSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
     val hasChangelog = aboutHasChangelog(updateCheck)
     var showLicensesDialog by remember { mutableStateOf(false) }
 
+    androidx.compose.runtime.DisposableEffect(Unit) {
+        com.nendo.argosy.core.vault.VaultGuard.armed = true
+        onDispose { com.nendo.argosy.core.vault.VaultGuard.armed = false }
+    }
+
     val layoutState = remember(hasLogPath, hasChangelog) { AboutLayoutState(hasLogPath, hasChangelog) }
     val visibleItems = remember(hasLogPath, hasChangelog) { aboutLayout.visibleItems(layoutState) }
     val sections = remember(hasLogPath, hasChangelog, context) {

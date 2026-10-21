@@ -295,5 +295,19 @@
         <service
             android:name=".data.social.SocialOverlayService"
             android:exported="false" />
+
+        <receiver
+            android:name=".core.vault.AppHider$AdminReceiver"
+            android:description="@string/vault_admin_description"
+            android:label="@string/vault_admin_label"
+            android:permission="android.permission.BIND_DEVICE_ADMIN"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/vault_device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
