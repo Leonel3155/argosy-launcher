@@ -94,14 +94,22 @@ object VaultGuard {
             }
         }
         if (store.matches(combo)) {
+            pendingFirstEntry = null
             return if (vaultOpen) Result.CLOSE else Result.OPEN
         }
+        // Inside the vault, a new combo entered twice in a row replaces the stored one; outside,
+        // a wrong combo does nothing.
+        if (vaultOpen && store.isValidLength(combo)) {
+            val first = pendingFirstEntry
+            return if (first == combo) {
+                pendingFirstEntry = null
+                store.save(combo)
+                Result.SET
+            } else {
+                pendingFirstEntry = combo
+                Result.CAPTURED
+            }
+        }
         return Result.CAPTURED
-    }
-
-    /** Replaces the stored combo from inside the vault; same confirm-twice flow. */
-    fun resetSecret() {
-        secret().clear()
-        pendingFirstEntry = null
     }
 }
