@@ -32,6 +32,7 @@
     <string name="home_footer_grid_page">Page</string>
     <string name="home_footer_grid_finished">Terminé</string>
     <string name="home_footer_grid_reroll">Relancer</string>
+    <string name="home_footer_grid_spotlight_next">Suivant</string>
     <string name="home_footer_grid_swap_screens">Inverser les écrans</string>
     <string name="home_footer_grid_hold_swap_screens">Maintenir pour inverser les écrans</string>
 
@@ -115,10 +116,18 @@
     <string name="tile_picker_feature_ra_subtitle">Vos points et derniers succès</string>
     <string name="tile_picker_feature_library_link_title">Lien vers la bibliothèque</string>
     <string name="tile_picker_feature_library_link_subtitle">Une vue enregistrée de votre bibliothèque</string>
+    <string name="tile_picker_feature_spotlight_title">À la une</string>
+    <string name="tile_picker_feature_spotlight_subtitle">Alterne entre votre jeu, votre série et les nouveautés</string>
     <string name="home_grid_tile_feature_random_label">Jeu aléatoire</string>
     <string name="home_grid_tile_feature_random_empty">Aucun jeu ne correspond aux filtres</string>
     <string name="home_grid_tile_feature_continue_label">Continuer à jouer</string>
     <string name="home_grid_tile_feature_continue_empty">Rien de joué pour l\'instant</string>
+    <string name="home_grid_tile_spotlight_label">À la une</string>
+    <string name="home_grid_tile_spotlight_continue_playing">Continuer à jouer ?</string>
+    <string name="home_grid_tile_spotlight_continue_watching">Continuer à regarder ?</string>
+    <string name="home_grid_tile_spotlight_newly_added">Ajouté récemment</string>
+    <string name="home_grid_tile_spotlight_empty">Rien à afficher pour l\'instant</string>
+    <string name="home_grid_tile_spotlight_empty_hint">Jouez à quelque chose ou ajoutez des jeux et ils apparaîtront ici</string>
     <string name="home_grid_tile_feature_ra_label">RetroAchievements</string>
     <string name="home_grid_tile_feature_library_link_label">Bibliothèque</string>
     <string name="home_grid_tile_feature_library_link_all">Tous les jeux</string>

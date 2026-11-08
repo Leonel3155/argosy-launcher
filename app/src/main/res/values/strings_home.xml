@@ -90,6 +90,8 @@
     <string name="home_footer_grid_finished">Finished</string>
     <!-- Footer hint on a random game tile: pick a different game. -->
     <string name="home_footer_grid_reroll">Re-roll</string>
+    <!-- Footer hint: show the next slide of the spotlight widget. Verb. -->
+    <string name="home_footer_grid_spotlight_next">Next</string>
     <!-- Footer hint on the curated grid on a two-screen device. Verb: moves the home screen and
          the game presentation to the other display. -->
     <string name="home_footer_grid_swap_screens">Swap Screens</string>
@@ -282,11 +284,24 @@
     <string name="tile_picker_feature_ra_subtitle">Your points and latest unlocks</string>
     <string name="tile_picker_feature_library_link_title">Library link</string>
     <string name="tile_picker_feature_library_link_subtitle">A saved view of your library</string>
+    <!-- Name of the home grid widget that rotates through featured games and shows. -->
+    <string name="tile_picker_feature_spotlight_title">Spotlight</string>
+    <string name="tile_picker_feature_spotlight_subtitle">Rotates between your game, your show and what\'s new</string>
     <!-- Feature tiles on the custom grid. The label names the feature under the game it shows. -->
     <string name="home_grid_tile_feature_random_label">Random game</string>
     <string name="home_grid_tile_feature_random_empty">No game matches the filters</string>
     <string name="home_grid_tile_feature_continue_label">Continue playing</string>
     <string name="home_grid_tile_feature_continue_empty">Nothing played yet</string>
+    <!-- Name of the spotlight widget, shown in the tile menu and the hidden tiles list. -->
+    <string name="home_grid_tile_spotlight_label">Spotlight</string>
+    <!-- Heading over the last game played on the spotlight widget. -->
+    <string name="home_grid_tile_spotlight_continue_playing">Keep playing?</string>
+    <!-- Heading over the show left part watched on the spotlight widget. -->
+    <string name="home_grid_tile_spotlight_continue_watching">Keep watching?</string>
+    <!-- Heading over the newest game in the library on the spotlight widget. -->
+    <string name="home_grid_tile_spotlight_newly_added">Newly added</string>
+    <string name="home_grid_tile_spotlight_empty">Nothing to show yet</string>
+    <string name="home_grid_tile_spotlight_empty_hint">Play something or add games and they\'ll show up here</string>
     <string name="home_grid_tile_feature_ra_label">RetroAchievements</string>
     <string name="home_grid_tile_feature_ra_signed_out">Sign in to see your unlocks</string>
     <string name="home_grid_tile_feature_ra_no_unlocks">No unlocks yet</string>

@@ -357,7 +357,10 @@ fun HomeScreen(
                 viewModel.republishCompanionDetail()
                 viewModel.onHomeShown()
             }
-            if (event == Lifecycle.Event.ON_STOP) viewModel.cancelAppBarReorder()
+            if (event == Lifecycle.Event.ON_STOP) {
+                viewModel.cancelAppBarReorder()
+                viewModel.onHomeStopped()
+            }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         inputDispatcher.subscribeView(inputHandler, forRoute = Screen.ROUTE_HOME)
@@ -1056,6 +1059,7 @@ fun HomeScreen(
                     val gridPageLabel = stringResource(R.string.home_footer_grid_page)
                     val gridFinishedLabel = stringResource(R.string.home_footer_grid_finished)
                     val gridRerollLabel = stringResource(R.string.home_footer_grid_reroll)
+                    val gridSpotlightNextLabel = stringResource(R.string.home_footer_grid_spotlight_next)
                     val gridSwapScreensLabel = stringResource(R.string.home_footer_grid_swap_screens)
                     val gridHoldSwapScreensLabel =
                         stringResource(R.string.home_footer_grid_hold_swap_screens)
@@ -1145,6 +1149,11 @@ fun HomeScreen(
                                     as? com.nendo.argosy.domain.model.HomeTileTargetRef.Feature
                                 if (feature?.kind == com.nendo.argosy.domain.model.FeatureTileKind.RANDOM_GAME) {
                                     add(InputButton.Y to gridRerollLabel)
+                                }
+                                if (feature?.kind == com.nendo.argosy.domain.model.FeatureTileKind.SPOTLIGHT &&
+                                    uiState.spotlightSlides.size > 1
+                                ) {
+                                    add(InputButton.Y to gridSpotlightNextLabel)
                                 }
                                 if (grid.focusedGameId != null) {
                                     add(InputButton.X to gridDetailsLabel)

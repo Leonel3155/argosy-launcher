@@ -32,6 +32,7 @@
     <string name="home_footer_grid_page">頁面</string>
     <string name="home_footer_grid_finished">已完成</string>
     <string name="home_footer_grid_reroll">重新隨機</string>
+    <string name="home_footer_grid_spotlight_next">下一個</string>
     <string name="home_footer_grid_swap_screens">交換螢幕</string>
     <string name="home_footer_grid_hold_swap_screens">長按交換螢幕</string>
 
@@ -115,10 +116,18 @@
     <string name="tile_picker_feature_ra_subtitle">你的分數和最新解鎖</string>
     <string name="tile_picker_feature_library_link_title">遊戲庫連結</string>
     <string name="tile_picker_feature_library_link_subtitle">已儲存的遊戲庫檢視</string>
+    <string name="tile_picker_feature_spotlight_title">精選</string>
+    <string name="tile_picker_feature_spotlight_subtitle">在你的遊戲、劇集和新內容之間輪換</string>
     <string name="home_grid_tile_feature_random_label">隨機遊戲</string>
     <string name="home_grid_tile_feature_random_empty">沒有符合篩選的遊戲</string>
     <string name="home_grid_tile_feature_continue_label">繼續遊玩</string>
     <string name="home_grid_tile_feature_continue_empty">還沒有玩過任何遊戲</string>
+    <string name="home_grid_tile_spotlight_label">精選</string>
+    <string name="home_grid_tile_spotlight_continue_playing">繼續玩？</string>
+    <string name="home_grid_tile_spotlight_continue_watching">繼續看？</string>
+    <string name="home_grid_tile_spotlight_newly_added">最近新增</string>
+    <string name="home_grid_tile_spotlight_empty">暫無內容</string>
+    <string name="home_grid_tile_spotlight_empty_hint">玩點什麼或新增遊戲後，它們會顯示在這裡</string>
     <string name="home_grid_tile_feature_ra_label">RetroAchievements</string>
     <string name="home_grid_tile_feature_library_link_label">遊戲庫</string>
     <string name="home_grid_tile_feature_library_link_all">全部遊戲</string>

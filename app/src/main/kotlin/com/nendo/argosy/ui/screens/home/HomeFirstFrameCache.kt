@@ -21,7 +21,8 @@ data class HomeTilesSnapshot(
     val tileLibraryLinks: Map<Long, LibraryLinkTileUi>,
     val tileShowcases: Map<Long, PresentationSlot.PlatformShowcase>,
     val continueGameId: Long?,
-    val raTileSummary: RaTileContent?
+    val raTileSummary: RaTileContent?,
+    val newestGameId: Long? = null
 )
 
 data class HomeFocusSnapshot(

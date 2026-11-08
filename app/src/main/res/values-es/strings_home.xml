@@ -32,6 +32,7 @@
     <string name="home_footer_grid_page">Página</string>
     <string name="home_footer_grid_finished">Terminado</string>
     <string name="home_footer_grid_reroll">Volver a elegir</string>
+    <string name="home_footer_grid_spotlight_next">Siguiente</string>
     <string name="home_footer_grid_swap_screens">Cambiar pantallas</string>
     <string name="home_footer_grid_hold_swap_screens">Mantén para cambiar pantallas</string>
 
@@ -115,10 +116,18 @@
     <string name="tile_picker_feature_ra_subtitle">Tus puntos y últimos logros</string>
     <string name="tile_picker_feature_library_link_title">Enlace a la biblioteca</string>
     <string name="tile_picker_feature_library_link_subtitle">Una vista guardada de tu biblioteca</string>
+    <string name="tile_picker_feature_spotlight_title">Destacados</string>
+    <string name="tile_picker_feature_spotlight_subtitle">Rota entre tu juego, tu serie y lo nuevo</string>
     <string name="home_grid_tile_feature_random_label">Juego aleatorio</string>
     <string name="home_grid_tile_feature_random_empty">Ningún juego coincide con los filtros</string>
     <string name="home_grid_tile_feature_continue_label">Seguir jugando</string>
     <string name="home_grid_tile_feature_continue_empty">Aún no has jugado nada</string>
+    <string name="home_grid_tile_spotlight_label">Destacados</string>
+    <string name="home_grid_tile_spotlight_continue_playing">¿Seguir jugando?</string>
+    <string name="home_grid_tile_spotlight_continue_watching">¿Seguir viendo?</string>
+    <string name="home_grid_tile_spotlight_newly_added">Recién llegado</string>
+    <string name="home_grid_tile_spotlight_empty">Aún no hay nada que mostrar</string>
+    <string name="home_grid_tile_spotlight_empty_hint">Juega algo o agrega juegos y aparecerán aquí</string>
     <string name="home_grid_tile_feature_ra_label">RetroAchievements</string>
     <string name="home_grid_tile_feature_library_link_label">Biblioteca</string>
     <string name="home_grid_tile_feature_library_link_all">Todos los juegos</string>

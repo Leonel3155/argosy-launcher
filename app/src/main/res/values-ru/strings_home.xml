@@ -32,6 +32,7 @@
     <string name="home_footer_grid_page">Страница</string>
     <string name="home_footer_grid_finished">Пройдено</string>
     <string name="home_footer_grid_reroll">Перевыбрать</string>
+    <string name="home_footer_grid_spotlight_next">Далее</string>
     <string name="home_footer_grid_swap_screens">Поменять экраны</string>
     <string name="home_footer_grid_hold_swap_screens">Удерживайте, чтобы поменять экраны</string>
 
@@ -115,10 +116,18 @@
     <string name="tile_picker_feature_ra_subtitle">Ваши очки и последние достижения</string>
     <string name="tile_picker_feature_library_link_title">Ссылка на библиотеку</string>
     <string name="tile_picker_feature_library_link_subtitle">Сохранённый вид библиотеки</string>
+    <string name="tile_picker_feature_spotlight_title">В центре внимания</string>
+    <string name="tile_picker_feature_spotlight_subtitle">Чередует вашу игру, ваш сериал и новинки</string>
     <string name="home_grid_tile_feature_random_label">Случайная игра</string>
     <string name="home_grid_tile_feature_random_empty">Ни одна игра не подходит под фильтры</string>
     <string name="home_grid_tile_feature_continue_label">Продолжить игру</string>
     <string name="home_grid_tile_feature_continue_empty">Пока ничего не сыграно</string>
+    <string name="home_grid_tile_spotlight_label">В центре внимания</string>
+    <string name="home_grid_tile_spotlight_continue_playing">Продолжить игру?</string>
+    <string name="home_grid_tile_spotlight_continue_watching">Продолжить просмотр?</string>
+    <string name="home_grid_tile_spotlight_newly_added">Недавно добавлено</string>
+    <string name="home_grid_tile_spotlight_empty">Пока нечего показать</string>
+    <string name="home_grid_tile_spotlight_empty_hint">Поиграйте во что-нибудь или добавьте игры, и они появятся здесь</string>
     <string name="home_grid_tile_feature_ra_label">RetroAchievements</string>
     <string name="home_grid_tile_feature_library_link_label">Библиотека</string>
     <string name="home_grid_tile_feature_library_link_all">Все игры</string>

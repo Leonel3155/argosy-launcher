@@ -16,6 +16,7 @@ import com.nendo.argosy.domain.model.PinnedCollection
 import com.nendo.argosy.domain.usecase.collection.CategoryType
 import com.nendo.argosy.ui.screens.common.DiscPickerState
 import com.nendo.argosy.ui.screens.common.SyncOverlayState
+import com.nendo.argosy.ui.components.isSpotlight
 import com.nendo.argosy.ui.screens.gamedetail.CollectionItemUi
 
 data class GameDownloadIndicator(
@@ -335,6 +336,8 @@ data class HomeUiState(
     val tileMedia: Map<String, HomeMediaUi> = emptyMap(),
     val continueGameId: Long? = null,
     val raTileSummary: com.nendo.argosy.domain.model.RaTileContent? = null,
+    val spotlightNewestGameId: Long? = null,
+    val spotlightIndex: Int = 0,
     val isLoading: Boolean = true,
     val isRommConfigured: Boolean = false,
     val showGameMenu: Boolean = false,
@@ -607,6 +610,7 @@ data class HomeUiState(
                     continueGameId?.let { tileGames[it] }
                 com.nendo.argosy.domain.model.FeatureTileKind.RA_SUMMARY -> null
                 com.nendo.argosy.domain.model.FeatureTileKind.LIBRARY_LINK -> null
+                com.nendo.argosy.domain.model.FeatureTileKind.SPOTLIGHT -> currentSpotlightSlide?.game
             }
             else -> null
         }
@@ -614,6 +618,32 @@ data class HomeUiState(
     val focusedTileMedia: HomeMediaUi?
         get() = (focusedTile?.target as? com.nendo.argosy.domain.model.HomeTileTargetRef.Media)
             ?.let { tileMedia[it.itemId] }
+
+    val spotlightSlides: List<com.nendo.argosy.ui.components.SpotlightSlideUi>
+        get() = com.nendo.argosy.ui.components.spotlightSlidesFor(
+            continueGame = continueGameId?.let { tileGames[it] },
+            watching = if (isMediaSignedIn) {
+                continueWatchingMedia.firstOrNull() ?: nextUpMedia.firstOrNull()
+            } else {
+                null
+            },
+            newest = spotlightNewestGameId?.let { tileGames[it] }
+        )
+
+    val currentSpotlightSlide: com.nendo.argosy.ui.components.SpotlightSlideUi?
+        get() {
+            val slides = spotlightSlides
+            return if (slides.isEmpty()) null else slides[spotlightIndex.mod(slides.size)]
+        }
+
+    /**
+     * Whether a spotlight on the page showing has more than one slide to turn to, which is the only
+     * time its rotation has anything to do.
+     */
+    val rotatesSpotlight: Boolean
+        get() = layoutKind == com.nendo.argosy.domain.model.HomeLayoutKind.CUSTOM_GRID &&
+            customGrid.tiles.any { it.pageIndex == customGrid.page && it.target.isSpotlight() } &&
+            spotlightSlides.size > 1
 
     /**
      * The breadcrumb label for a row named after something in the library rather than by wording
@@ -779,7 +809,9 @@ data class HomeUiState(
                     raSummary = raTileSummary,
                     context = context,
                     strings = HOME_FEATURE_TILE_STRINGS,
-                    libraryLink = tileLibraryLinks[tile.id]
+                    libraryLink = tileLibraryLinks[tile.id],
+                    spotlightSlides = spotlightSlides,
+                    spotlightIndex = spotlightIndex
                 )
             com.nendo.argosy.domain.model.HomeTileTargetRef.Unresolvable ->
                 com.nendo.argosy.ui.components.CustomGridTileContent(
@@ -817,6 +849,14 @@ internal val HOME_FEATURE_TILE_STRINGS = com.nendo.argosy.ui.common.FeatureTileS
         accountTally = R.string.home_grid_tile_ra_account_tally,
         progress = R.string.home_grid_tile_ra_progress,
         gameProgress = R.string.home_grid_tile_ra_game_progress
+    ),
+    spotlight = com.nendo.argosy.ui.components.SpotlightTileLabels(
+        name = R.string.home_grid_tile_spotlight_label,
+        continuePlaying = R.string.home_grid_tile_spotlight_continue_playing,
+        continueWatching = R.string.home_grid_tile_spotlight_continue_watching,
+        newlyAdded = R.string.home_grid_tile_spotlight_newly_added,
+        empty = R.string.home_grid_tile_spotlight_empty,
+        emptyHint = R.string.home_grid_tile_spotlight_empty_hint
     )
 )
 

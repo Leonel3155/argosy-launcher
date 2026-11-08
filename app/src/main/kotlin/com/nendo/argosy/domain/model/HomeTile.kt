@@ -10,6 +10,12 @@ import com.nendo.argosy.data.local.entity.MediaTilePlayMode
 const val MEDIA_TILE_MIN_SPAN = 2
 
 /**
+ * The smallest a spotlight tile is allowed to be: room for its artwork, heading and title to read
+ * as one card.
+ */
+const val SPOTLIGHT_TILE_MIN_SPAN = 2
+
+/**
  * A tile's rectangle on a page, anchored at its top-left cell. Growth runs down and right from the
  * anchor, so extending a tile never moves it.
  */
@@ -90,6 +96,7 @@ sealed interface HomeTileTargetRef {
      * A tile that performs an action. Each kind reads the one field it owns: [filters] on
      * [FeatureTileKind.RANDOM_GAME], [libraryLink] on [FeatureTileKind.LIBRARY_LINK], and
      * [pickedGameId] on [FeatureTileKind.RA_SUMMARY], null there meaning the account overview.
+     * [FeatureTileKind.SPOTLIGHT] reads none of them.
      */
     data class Feature(
         val kind: FeatureTileKind,
@@ -105,7 +112,8 @@ enum class FeatureTileKind {
     RANDOM_GAME,
     CONTINUE,
     RA_SUMMARY,
-    LIBRARY_LINK;
+    LIBRARY_LINK,
+    SPOTLIGHT;
 
     companion object {
         fun fromStored(value: String?): FeatureTileKind? = entries.find { it.name == value }
@@ -124,10 +132,13 @@ data class RandomTileFilters(
 )
 
 /**
- * The floor [target] imposes on a tile's span. Everything but media sits happily in one cell.
+ * The floor [target] imposes on a tile's span. Everything but media and the spotlight sits happily
+ * in one cell.
  */
 fun minimumSpanFor(target: HomeTileTargetRef): Int = when (target) {
     is HomeTileTargetRef.Media, is HomeTileTargetRef.LocalMedia -> MEDIA_TILE_MIN_SPAN
+    is HomeTileTargetRef.Feature ->
+        if (target.kind == FeatureTileKind.SPOTLIGHT) SPOTLIGHT_TILE_MIN_SPAN else 1
     else -> 1
 }
 

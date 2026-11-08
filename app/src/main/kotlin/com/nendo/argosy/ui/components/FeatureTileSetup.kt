@@ -87,7 +87,8 @@ data class FeatureTileSetup(
             )
             FeatureTileKind.RANDOM_GAME,
             FeatureTileKind.CONTINUE,
-            FeatureTileKind.RA_SUMMARY -> listOf(
+            FeatureTileKind.RA_SUMMARY,
+            FeatureTileKind.SPOTLIGHT -> listOf(
                 FeatureSetupRow.DOWNLOADED_ONLY,
                 FeatureSetupRow.NEVER_PLAYED,
                 FeatureSetupRow.PLATFORMS,
@@ -131,7 +132,8 @@ data class FeatureTileSetup(
             FeatureTileKind.RA_SUMMARY -> R.string.ui_feature_setup_title_ra
             FeatureTileKind.LIBRARY_LINK -> R.string.ui_feature_setup_title_library_link
             FeatureTileKind.RANDOM_GAME,
-            FeatureTileKind.CONTINUE -> R.string.ui_feature_setup_title
+            FeatureTileKind.CONTINUE,
+            FeatureTileKind.SPOTLIGHT -> R.string.ui_feature_setup_title
         }
 
     @get:StringRes

@@ -32,6 +32,7 @@
     <string name="home_footer_grid_page">पेज</string>
     <string name="home_footer_grid_finished">पूर्ण</string>
     <string name="home_footer_grid_reroll">फिर से चुनें</string>
+    <string name="home_footer_grid_spotlight_next">अगला</string>
     <string name="home_footer_grid_swap_screens">स्क्रीन बदलें</string>
     <string name="home_footer_grid_hold_swap_screens">स्क्रीन बदलने के लिए दबाए रखें</string>
 
@@ -115,10 +116,18 @@
     <string name="tile_picker_feature_ra_subtitle">आपके अंक और नवीनतम अनलॉक</string>
     <string name="tile_picker_feature_library_link_title">लाइब्रेरी लिंक</string>
     <string name="tile_picker_feature_library_link_subtitle">आपकी लाइब्रेरी का सहेजा गया दृश्य</string>
+    <string name="tile_picker_feature_spotlight_title">स्पॉटलाइट</string>
+    <string name="tile_picker_feature_spotlight_subtitle">आपके गेम, आपके शो और नई चीज़ों के बीच बदलता रहता है</string>
     <string name="home_grid_tile_feature_random_label">यादृच्छिक गेम</string>
     <string name="home_grid_tile_feature_random_empty">फ़िल्टर से कोई गेम मेल नहीं खाता</string>
     <string name="home_grid_tile_feature_continue_label">खेलना जारी रखें</string>
     <string name="home_grid_tile_feature_continue_empty">अभी तक कुछ नहीं खेला</string>
+    <string name="home_grid_tile_spotlight_label">स्पॉटलाइट</string>
+    <string name="home_grid_tile_spotlight_continue_playing">खेलना जारी रखें?</string>
+    <string name="home_grid_tile_spotlight_continue_watching">देखना जारी रखें?</string>
+    <string name="home_grid_tile_spotlight_newly_added">नया जोड़ा गया</string>
+    <string name="home_grid_tile_spotlight_empty">अभी दिखाने के लिए कुछ नहीं है</string>
+    <string name="home_grid_tile_spotlight_empty_hint">कुछ खेलें या गेम जोड़ें, वे यहाँ दिखेंगे</string>
     <string name="home_grid_tile_feature_ra_label">RetroAchievements</string>
     <string name="home_grid_tile_feature_library_link_label">लाइब्रेरी</string>
     <string name="home_grid_tile_feature_library_link_all">सभी गेम</string>
