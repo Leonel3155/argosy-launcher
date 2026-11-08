@@ -159,47 +159,27 @@ class HomeViewModel @Inject constructor(
         selectDoubleTap.press(onSingle = onSingle, onDouble = { monthlyRecap.openLastMonth() })
     }
 
+    private val spotlightRotation = com.nendo.argosy.ui.screens.home.delegates.SpotlightRotation(
+        scope = viewModelScope,
+        intervalMs = ComponentDefaults.SpotlightTile.rotateMs.toLong(),
+        onTurn = { _uiState.update { it.withSpotlightTurned() } }
+    )
+
     fun onHomeShown() {
         monthlyRecap.onHomeShown()
         _uiState.update { it.copy(spotlightIndex = 0) }
-        restartSpotlightRotation()
+        spotlightRotation.restart()
     }
 
     fun onHomeHidden() {
         selectDoubleTap.cancel()
         monthlyRecap.onHomeHidden()
-        stopSpotlightRotation()
+        spotlightRotation.stop()
     }
 
-    fun onHomeStopped() = stopSpotlightRotation()
+    fun onHomeStopped() = spotlightRotation.stop()
 
-    private var spotlightRotation: Job? = null
-
-    private fun restartSpotlightRotation() {
-        spotlightRotation?.cancel()
-        spotlightRotation = viewModelScope.launch {
-            while (true) {
-                delay(ComponentDefaults.SpotlightTile.rotateMs.toLong())
-                _uiState.update { state ->
-                    if (state.rotatesSpotlight) {
-                        state.copy(spotlightIndex = state.spotlightIndex + 1)
-                    } else {
-                        state
-                    }
-                }
-            }
-        }
-    }
-
-    private fun stopSpotlightRotation() {
-        spotlightRotation?.cancel()
-        spotlightRotation = null
-    }
-
-    override fun advanceSpotlight() {
-        _uiState.update { it.copy(spotlightIndex = it.spotlightIndex + 1) }
-        if (spotlightRotation != null) restartSpotlightRotation()
-    }
+    override fun advanceSpotlight() = spotlightRotation.advance()
 
     override fun playSpotlightMedia(media: HomeMediaUi) = startMedia(media, startOver = false)
 

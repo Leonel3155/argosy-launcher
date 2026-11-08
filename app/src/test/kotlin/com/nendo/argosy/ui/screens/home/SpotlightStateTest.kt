@@ -114,6 +114,13 @@ class SpotlightStateTest {
     }
 
     @Test
+    fun `a turn moves to the next card only while the page showing can rotate`() {
+        assertEquals(1, spotlightState().withSpotlightTurned().spotlightIndex)
+        assertEquals(0, spotlightState(newestGameId = null).withSpotlightTurned().spotlightIndex)
+        assertEquals(0, spotlightState(page = 1).withSpotlightTurned().spotlightIndex)
+    }
+
+    @Test
     fun `a spotlight tile is never smaller than its floor`() {
         assertEquals(
             SPOTLIGHT_TILE_MIN_SPAN,

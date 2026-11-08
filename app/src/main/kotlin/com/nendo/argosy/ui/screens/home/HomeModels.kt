@@ -645,6 +645,9 @@ data class HomeUiState(
             customGrid.tiles.any { it.pageIndex == customGrid.page && it.target.isSpotlight() } &&
             spotlightSlides.size > 1
 
+    fun withSpotlightTurned(): HomeUiState =
+        if (rotatesSpotlight) copy(spotlightIndex = spotlightIndex + 1) else this
+
     /**
      * The breadcrumb label for a row named after something in the library rather than by wording
      * that never changes. A platform strips its manufacturer prefix when that lands in 4..9
