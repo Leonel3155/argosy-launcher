@@ -27,7 +27,8 @@ import com.nendo.argosy.domain.model.placeTiles
  */
 private fun HomeTileTargetRef.showsGameCover(): Boolean = when (this) {
     is HomeTileTargetRef.Game -> true
-    is HomeTileTargetRef.Feature -> kind != FeatureTileKind.RA_SUMMARY
+    is HomeTileTargetRef.Feature ->
+        kind != FeatureTileKind.RA_SUMMARY && kind != FeatureTileKind.SPOTLIGHT
     else -> false
 }
 

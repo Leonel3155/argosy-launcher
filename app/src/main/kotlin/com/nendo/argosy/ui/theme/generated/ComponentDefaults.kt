@@ -382,6 +382,16 @@ object ComponentDefaults {
         const val audioFadeMs = 450
     }
 
+    object SpotlightTile {
+        const val rotateMs = 6000
+        const val crossfadeMs = 700
+        const val kenBurnsMs = 16000
+        const val kenBurnsScale = 1.12f
+        const val scrimTopAlpha = 0.1f
+        const val scrimBottomAlpha = 0.9f
+        const val dotIdleAlpha = 0.45f
+    }
+
     object AutoGrid {
         const val entryStartScale = 0.6f
         const val entryMs = 200

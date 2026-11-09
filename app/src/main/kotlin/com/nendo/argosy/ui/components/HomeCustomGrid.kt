@@ -204,7 +204,8 @@ data class CustomGridTileContent(
      * What a RetroAchievements tile draws, in place of every other field here. Present only on
      * that tile, which owns its own layout in each cell shape rather than borrowing one.
      */
-    val ra: RaTileUi? = null
+    val ra: RaTileUi? = null,
+    val spotlight: SpotlightTileUi? = null
 )
 
 /**
@@ -547,6 +548,22 @@ private fun CustomGridCellBox(
             onLongClick = onLongClick,
             onBadgeTap = onBadgeTap,
             onBandTap = onBandTap,
+            onCoverLoaded = onCoverLoaded
+        )
+        return
+    }
+
+    val spotlight = content?.spotlight
+    if (spotlight != null) {
+        SpotlightTileBox(
+            placement = placement,
+            rect = rect,
+            spotlight = spotlight,
+            isFocused = isFocused,
+            isOverlapped = isOverlapped,
+            editModeLabel = editModeLabel,
+            onClick = onClick,
+            onLongClick = onLongClick,
             onCoverLoaded = onCoverLoaded
         )
         return

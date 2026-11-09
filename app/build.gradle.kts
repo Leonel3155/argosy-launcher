@@ -16,6 +16,8 @@ val keystoreProperties = Properties().apply {
     }
 }
 
+val forkDebugKeystoreFile = rootProject.file("signing/debug.keystore")
+
 val envPropertiesFile = rootProject.file(".env")
 val envProperties = Properties().apply {
     if (envPropertiesFile.exists()) {
@@ -73,6 +75,14 @@ android {
     }
 
     signingConfigs {
+        getByName("debug") {
+            if (forkDebugKeystoreFile.exists()) {
+                storeFile = forkDebugKeystoreFile
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
         create("release") {
             if (keystorePropertiesFile.exists()) {
                 storeFile = file(keystoreProperties["storeFile"] as String)

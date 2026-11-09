@@ -10,6 +10,9 @@ import com.nendo.argosy.domain.model.RaTileContent
 import com.nendo.argosy.domain.model.RaUnlock
 import com.nendo.argosy.ui.components.RaBrowseEntry
 import com.nendo.argosy.ui.components.RaTileLabels
+import com.nendo.argosy.ui.components.SpotlightSlideKind
+import com.nendo.argosy.ui.components.SpotlightSlideUi
+import com.nendo.argosy.ui.components.SpotlightTileLabels
 import com.nendo.argosy.ui.screens.home.HomeGameUi
 import io.mockk.every
 import io.mockk.mockk
@@ -53,7 +56,15 @@ class FeatureTileContentBuilderTest {
         libraryLinkAll = R.string.home_grid_tile_feature_library_link_all,
         libraryLinkCount = R.string.home_grid_tile_feature_library_link_count,
         libraryLinkMore = R.string.home_grid_tile_feature_library_link_more,
-        ra = labels
+        ra = labels,
+        spotlight = SpotlightTileLabels(
+            name = R.string.home_grid_tile_spotlight_label,
+            continuePlaying = R.string.home_grid_tile_spotlight_continue_playing,
+            continueWatching = R.string.home_grid_tile_spotlight_continue_watching,
+            newlyAdded = R.string.home_grid_tile_spotlight_newly_added,
+            empty = R.string.home_grid_tile_spotlight_empty,
+            emptyHint = R.string.home_grid_tile_spotlight_empty_hint
+        )
     )
 
     private val tileGames = mapOf(
@@ -126,6 +137,47 @@ class FeatureTileContentBuilderTest {
         assertNull(ra.groundGame)
         assertEquals(labels, ra.labels)
         assertEquals("res:${R.string.home_grid_tile_feature_ra_label}", content.label)
+    }
+
+    @Test
+    fun `the spotlight wraps its turn onto the slides and names itself in menus`() {
+        val slides = listOf(
+            SpotlightSlideUi(SpotlightSlideKind.CONTINUE_PLAYING, game = tileGames.getValue(LATEST_GAME_ID)),
+            SpotlightSlideUi(SpotlightSlideKind.NEWLY_ADDED, game = tileGames.getValue(TRACKED_GAME_ID))
+        )
+        val content = featureTileContentFor(
+            target = HomeTileTargetRef.Feature(FeatureTileKind.SPOTLIGHT),
+            tileGames = tileGames,
+            continueGameId = LATEST_GAME_ID,
+            raSummary = null,
+            context = context,
+            strings = strings,
+            spotlightSlides = slides,
+            spotlightIndex = 3
+        )
+        val spotlight = requireNotNull(content.spotlight)
+
+        assertEquals("res:${R.string.home_grid_tile_spotlight_label}", content.label)
+        assertEquals(1, spotlight.currentIndex)
+        assertEquals(slides[1], spotlight.current)
+        assertNull(content.game)
+    }
+
+    @Test
+    fun `a spotlight with nothing to show has no slide showing`() {
+        val content = featureTileContentFor(
+            target = HomeTileTargetRef.Feature(FeatureTileKind.SPOTLIGHT),
+            tileGames = tileGames,
+            continueGameId = null,
+            raSummary = null,
+            context = context,
+            strings = strings,
+            spotlightIndex = 5
+        )
+        val spotlight = requireNotNull(content.spotlight)
+
+        assertNull(spotlight.current)
+        assertEquals(0, spotlight.currentIndex)
     }
 
     private fun raContentFor(summary: RaTileContent?) = featureTileContentFor(

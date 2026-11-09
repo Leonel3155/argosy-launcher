@@ -55,6 +55,8 @@ interface HomeInputActions {
     fun toggleTileEditMode()
     fun advanceFocusGame()
     fun rerollRandomTile()
+    fun advanceSpotlight()
+    fun playSpotlightMedia(media: com.nendo.argosy.ui.screens.home.HomeMediaUi)
     fun movePageChooserFocus(delta: Int)
     fun confirmPageChooser()
     fun backOutOfPageChooser()
@@ -409,6 +411,18 @@ class HomeInputHandler(
                     target.libraryLink
                         ?: com.nendo.argosy.domain.model.LibraryLinkFilters()
                 )
+            com.nendo.argosy.domain.model.FeatureTileKind.SPOTLIGHT -> confirmSpotlight(state)
+        }
+    }
+
+    private fun confirmSpotlight(state: HomeUiState) {
+        val slide = state.currentSpotlightSlide
+        val game = slide?.game
+        val media = slide?.media
+        when {
+            game != null -> activateTileGame(game.id, state)
+            media != null -> actions.playSpotlightMedia(media)
+            else -> actions.navigateToLibrary(null, null)
         }
     }
 
@@ -789,6 +803,10 @@ class HomeInputHandler(
             if (feature?.kind == com.nendo.argosy.domain.model.FeatureTileKind.RANDOM_GAME) {
                 actions.rerollRandomTile()
                 return InputResult.handled(SoundType.TOGGLE)
+            }
+            if (feature?.kind == com.nendo.argosy.domain.model.FeatureTileKind.SPOTLIGHT) {
+                actions.advanceSpotlight()
+                return InputResult.handled(SoundType.NAVIGATE)
             }
         }
         if (!isCustomGrid(state) && focusedIsMedia(state)) {

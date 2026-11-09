@@ -8,6 +8,9 @@ import com.nendo.argosy.domain.model.RaTileContent
 import com.nendo.argosy.ui.components.CustomGridTileContent
 import com.nendo.argosy.ui.components.RaTileLabels
 import com.nendo.argosy.ui.components.RaTileUi
+import com.nendo.argosy.ui.components.SpotlightSlideUi
+import com.nendo.argosy.ui.components.SpotlightTileLabels
+import com.nendo.argosy.ui.components.SpotlightTileUi
 import com.nendo.argosy.ui.components.TilePickerEntry
 import com.nendo.argosy.ui.components.tileStatsFor
 import com.nendo.argosy.ui.screens.home.HomeGameUi
@@ -32,7 +35,8 @@ data class FeatureTileStrings(
     @StringRes val libraryLinkAll: Int,
     @StringRes val libraryLinkCount: Int,
     @StringRes val libraryLinkMore: Int,
-    val ra: RaTileLabels
+    val ra: RaTileLabels,
+    val spotlight: SpotlightTileLabels
 )
 
 fun libraryLinkLabel(
@@ -62,7 +66,8 @@ private const val LIBRARY_LINK_MAX_PARTS = 3
 
 /**
  * What a feature tile draws, from what the surface has resolved: the games the page points at,
- * the game the continue tile resumes, and what the RetroAchievements tile shows.
+ * the game the continue tile resumes, what the RetroAchievements tile shows, and the slides the
+ * spotlight rotates through with the turn it is on.
  */
 fun featureTileContentFor(
     target: HomeTileTargetRef.Feature,
@@ -72,6 +77,8 @@ fun featureTileContentFor(
     context: Context,
     strings: FeatureTileStrings,
     libraryLink: com.nendo.argosy.ui.screens.home.LibraryLinkTileUi? = null,
+    spotlightSlides: List<SpotlightSlideUi> = emptyList(),
+    spotlightIndex: Int = 0,
     now: Long = System.currentTimeMillis()
 ): CustomGridTileContent = when (target.kind) {
     FeatureTileKind.RANDOM_GAME -> {
@@ -117,6 +124,15 @@ fun featureTileContentFor(
             newSince = now - RA_NEW_UNLOCK_WINDOW_MS
         )
     )
+    FeatureTileKind.SPOTLIGHT -> CustomGridTileContent(
+        game = null,
+        label = context.getString(strings.spotlight.name),
+        spotlight = SpotlightTileUi(
+            slides = spotlightSlides,
+            index = spotlightIndex,
+            labels = strings.spotlight
+        )
+    )
 }
 
 data class FeatureTilePickerStrings(
@@ -127,7 +143,9 @@ data class FeatureTilePickerStrings(
     @StringRes val raTitle: Int,
     @StringRes val raSubtitle: Int,
     @StringRes val libraryLinkTitle: Int,
-    @StringRes val libraryLinkSubtitle: Int
+    @StringRes val libraryLinkSubtitle: Int,
+    @StringRes val spotlightTitle: Int,
+    @StringRes val spotlightSubtitle: Int
 )
 
 /**
@@ -160,5 +178,10 @@ fun featureTilePickerEntries(
         ),
         title = context.getString(strings.libraryLinkTitle),
         subtitle = context.getString(strings.libraryLinkSubtitle)
+    ),
+    TilePickerEntry(
+        target = HomeTileTargetRef.Feature(FeatureTileKind.SPOTLIGHT),
+        title = context.getString(strings.spotlightTitle),
+        subtitle = context.getString(strings.spotlightSubtitle)
     )
 )

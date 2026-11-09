@@ -55,6 +55,7 @@ import com.nendo.argosy.ui.screens.home.delegates.HomeSyncDelegate
 import com.nendo.argosy.ui.screens.home.delegates.HomeTilePickerDelegate
 import com.nendo.argosy.ui.screens.home.delegates.HomeVideoPreviewDelegate
 import com.nendo.argosy.ui.screens.home.delegates.PlatformChangeResult
+import com.nendo.argosy.ui.theme.generated.ComponentDefaults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -89,7 +90,9 @@ private val HOME_FEATURE_TILE_PICKER_STRINGS = com.nendo.argosy.ui.common.Featur
     raTitle = R.string.tile_picker_feature_ra_title,
     raSubtitle = R.string.tile_picker_feature_ra_subtitle,
     libraryLinkTitle = R.string.tile_picker_feature_library_link_title,
-    libraryLinkSubtitle = R.string.tile_picker_feature_library_link_subtitle
+    libraryLinkSubtitle = R.string.tile_picker_feature_library_link_subtitle,
+    spotlightTitle = R.string.tile_picker_feature_spotlight_title,
+    spotlightSubtitle = R.string.tile_picker_feature_spotlight_subtitle
 )
 
 @HiltViewModel
@@ -156,12 +159,29 @@ class HomeViewModel @Inject constructor(
         selectDoubleTap.press(onSingle = onSingle, onDouble = { monthlyRecap.openLastMonth() })
     }
 
-    fun onHomeShown() = monthlyRecap.onHomeShown()
+    private val spotlightRotation = com.nendo.argosy.ui.screens.home.delegates.SpotlightRotation(
+        scope = viewModelScope,
+        intervalMs = ComponentDefaults.SpotlightTile.rotateMs.toLong(),
+        onTurn = { _uiState.update { it.withSpotlightTurned() } }
+    )
+
+    fun onHomeShown() {
+        monthlyRecap.onHomeShown()
+        _uiState.update { it.copy(spotlightIndex = 0) }
+        spotlightRotation.restart()
+    }
 
     fun onHomeHidden() {
         selectDoubleTap.cancel()
         monthlyRecap.onHomeHidden()
+        spotlightRotation.stop()
     }
+
+    fun onHomeStopped() = spotlightRotation.stop()
+
+    override fun advanceSpotlight() = spotlightRotation.advance()
+
+    override fun playSpotlightMedia(media: HomeMediaUi) = startMedia(media, startOver = false)
 
     val quickNavigationEnabled: StateFlow<Boolean> get() = quickNavigationSource.enabled
 
@@ -467,7 +487,8 @@ class HomeViewModel @Inject constructor(
             tileLibraryLinks = tiles.tileLibraryLinks,
             tileShowcases = tiles.tileShowcases,
             continueGameId = tiles.continueGameId,
-            raTileSummary = tiles.raTileSummary
+            raTileSummary = tiles.raTileSummary,
+            spotlightNewestGameId = tiles.newestGameId
         )
     }
 
@@ -609,6 +630,15 @@ class HomeViewModel @Inject constructor(
             FeatureTileKind.RANDOM_GAME, FeatureTileKind.CONTINUE -> null
             FeatureTileKind.RA_SUMMARY -> raTileDetail(state)
             FeatureTileKind.LIBRARY_LINK -> state.tileShowcases[tile.id]
+            FeatureTileKind.SPOTLIGHT -> state.currentSpotlightSlide?.media?.let { media ->
+                detail(
+                    title = media.title,
+                    subtitle = media.subtitle,
+                    overview = media.overview,
+                    artUrl = media.posterUrl,
+                    backdropUrl = media.backdropUrl
+                )
+            }
         }
         HomeTileTargetRef.Unresolvable -> null
     }
@@ -1180,8 +1210,11 @@ class HomeViewModel @Inject constructor(
                         is HomeTileTargetRef.Feature -> target.pickedGameId
                         else -> null
                     }
-                } + listOfNotNull(feature.continueGameId, feature.raSummary?.groundGameId) +
-                    libraryLinks.values.mapNotNull { it.coverGameId }
+                } + listOfNotNull(
+                    feature.continueGameId,
+                    feature.raSummary?.groundGameId,
+                    feature.newestGameId
+                ) + libraryLinks.values.mapNotNull { it.coverGameId }
             ).distinct()
         )
         val collections = libraryDelegate.resolveTileCollections(
@@ -1205,7 +1238,8 @@ class HomeViewModel @Inject constructor(
                 tileLibraryLinks = libraryLinks,
                 tileShowcases = showcases,
                 continueGameId = feature.continueGameId,
-                raTileSummary = feature.raSummary
+                raTileSummary = feature.raSummary,
+                spotlightNewestGameId = feature.newestGameId
             )
         }
         rememberPublishedTiles()
@@ -1225,7 +1259,8 @@ class HomeViewModel @Inject constructor(
             tileLibraryLinks = state.tileLibraryLinks,
             tileShowcases = state.tileShowcases,
             continueGameId = state.continueGameId,
-            raTileSummary = state.raTileSummary
+            raTileSummary = state.raTileSummary,
+            newestGameId = state.spotlightNewestGameId
         )
     }
 
@@ -1244,13 +1279,20 @@ class HomeViewModel @Inject constructor(
     ): FeatureTileContent {
         val features = shown.mapNotNull { it.target as? HomeTileTargetRef.Feature }
         val raTile = features.firstOrNull { it.kind == FeatureTileKind.RA_SUMMARY }
+        val hasSpotlight = features.any { it.kind == FeatureTileKind.SPOTLIGHT }
         return FeatureTileContent(
-            continueGameId = if (features.any { it.kind == FeatureTileKind.CONTINUE }) {
+            continueGameId = if (hasSpotlight || features.any { it.kind == FeatureTileKind.CONTINUE }) {
                 gameRepository.getRecentlyPlayed(1).firstOrNull()?.id
             } else {
                 null
             },
-            raSummary = raTile?.let { raTileContentRepository.load(it.pickedGameId) }
+            raSummary = raTile?.let { raTileContentRepository.load(it.pickedGameId) },
+            newestGameId = if (hasSpotlight) {
+                gameRepository.getNewlyAdded(java.time.Instant.EPOCH, installedOnly = false, limit = 1)
+                    .firstOrNull()?.id
+            } else {
+                null
+            }
         )
     }
 
@@ -1260,7 +1302,11 @@ class HomeViewModel @Inject constructor(
             val resolved = libraryDelegate.resolveTileGames(
                 (
                     _uiState.value.tileGames.keys +
-                        listOfNotNull(feature.continueGameId, feature.raSummary?.groundGameId)
+                        listOfNotNull(
+                            feature.continueGameId,
+                            feature.raSummary?.groundGameId,
+                            feature.newestGameId
+                        )
                 ).distinct()
             )
             val gradients = gradientExtractionDelegate.gradients.value
@@ -1270,7 +1316,8 @@ class HomeViewModel @Inject constructor(
                     tileGames = it.tileGames +
                         resolved.mapValues { (_, game) -> game.applyGradient(gradients) },
                     continueGameId = feature.continueGameId,
-                    raTileSummary = feature.raSummary
+                    raTileSummary = feature.raSummary,
+                    spotlightNewestGameId = feature.newestGameId
                 )
             }
         }
