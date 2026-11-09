@@ -496,6 +496,24 @@ class ArgosyActivity : ComponentActivity() {
     @SuppressLint("RestrictedApi")
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (!dualScreenManager.claimInput(event)) return true
+        when (
+            com.nendo.argosy.core.vault.VaultGuard.onKey(
+                event,
+                vaultOpen = com.nendo.argosy.core.vault.VaultProfile.isActive,
+                onModifierTap = {
+                    gamepadInputHandler.injectEvent(GamepadEvent.LeftStickClick, isRepeat = false)
+                }
+            )
+        ) {
+            com.nendo.argosy.core.vault.VaultGuard.Result.OPEN ->
+                return true.also { com.nendo.argosy.core.vault.VaultProfile.enter(this) }
+            com.nendo.argosy.core.vault.VaultGuard.Result.CLOSE ->
+                return true.also { com.nendo.argosy.core.vault.VaultProfile.exit(this) }
+            com.nendo.argosy.core.vault.VaultGuard.Result.SET ->
+                return true.also { vaultDoorFeedback() }
+            com.nendo.argosy.core.vault.VaultGuard.Result.CAPTURED -> return true
+            com.nendo.argosy.core.vault.VaultGuard.Result.IGNORED -> Unit
+        }
         if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
             Logger.verbose(TAG) { "dispatchKeyEvent: key=${event.keyCode} isHome=$isOnHomeScreen swapped=${dualScreenManager.isRolesSwapped.value} gameOnSecondary=${dualScreenManager.swappedIsGameActive.value} companion=${dualScreenManager.isCompanionActive.value} overlay=$isOverlayFocused" }
         }
@@ -605,6 +623,15 @@ class ArgosyActivity : ComponentActivity() {
         if (gamepadInputHandler.processStickMotion(event, steerRightStick, ::deliverStickEvent)) return true
         if (gamepadInputHandler.handleMotionEvent(event)) return true
         return super.dispatchGenericMotionEvent(event)
+    }
+
+    private fun vaultDoorFeedback() {
+        val vibrator = getSystemService(android.content.Context.VIBRATOR_SERVICE) as? android.os.Vibrator
+        runCatching {
+            vibrator?.vibrate(
+                android.os.VibrationEffect.createOneShot(40, android.os.VibrationEffect.DEFAULT_AMPLITUDE)
+            )
+        }
     }
 
     private fun deliverStickEvent(stickEvent: GamepadEvent, isRepeat: Boolean) {

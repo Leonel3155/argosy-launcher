@@ -45,6 +45,11 @@ class ArgosyApp : Application(), Configuration.Provider, ImageLoaderFactory {
 
     private val appScope = SafeCoroutineScope(Dispatchers.IO, "ArgosyApp")
 
+    override fun attachBaseContext(base: android.content.Context) {
+        com.nendo.argosy.core.vault.VaultProfile.resolveAtProcessStart(base)
+        super.attachBaseContext(com.nendo.argosy.core.vault.VaultProfile.wrap(base))
+    }
+
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
@@ -176,6 +181,7 @@ class ArgosyApp : Application(), Configuration.Provider, ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+        com.nendo.argosy.core.vault.VaultProfile.install(this)
         appScope.launch { userCertStore.initialize() }
         appScope.launch { com.nendo.argosy.util.RootShell.isAvailable }
         appScope.launch { socialSyncCoordinator.discardQueueWithoutSocialAccount() }
